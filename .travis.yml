@@ -1,0 +1,45 @@
+# More details on how to configure the Travis build
+# https://docs.travis-ci.com/user/customizing-the-build/
+
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+sudo: true
+
+language: java
+
+matrix:
+  include:
+  - jdk: oraclejdk8
+  - jdk: oraclejdk8
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true SIMULATE_JAVA11=true
+  - jdk: openjdk10
+    env: SKIP_RELEASE=true JDK='Oracle JDK 10'
+  - jdk: openjdk10
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 10'
+  - jdk: openjdk11
+    env: SKIP_RELEASE=true JDK='Oracle JDK 11'
+  - jdk: openjdk11
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
+
+branches:
+  except:
+  - /^v\d/
+
+install:
+ - true
+
+script:
+  - echo "Installing"
+
+after_success:
+  - echo "Installed"
