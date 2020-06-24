@@ -1,6 +1,5 @@
 # ls aliases
-alias ls='ls -G'
-alias ll='ls -lah'
+alias ll='ls -lah --color=auto'
 
 # tree aliaces
 alias tree='tree --dirsfirst'

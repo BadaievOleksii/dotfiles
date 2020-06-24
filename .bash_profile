@@ -117,19 +117,8 @@ function prompt_command {
 
 	# calculate prompt length
 	local PS1_length=$((${#USER}+${#LOCAL_HOSTNAME}+${#PWDNAME}+${#PS1_GIT}+${#PS1_VENV}+3))
-	local FILL=
 
 	# if length is greater, than terminal width
-	if [[ $PS1_length -gt $COLUMNS ]]; then
-		# strip working directory name
-		PWDNAME="...${PWDNAME:$(($PS1_length-$COLUMNS+3))}"
-	else
-		# else calculate fillsize
-		local fillsize=$(($COLUMNS-$PS1_length))
-		FILL=${color_white}
-		while [[ $fillsize -gt 0 ]]; do FILL="${FILL}-"; fillsize=$(($fillsize-1)); done
-		FILL="${FILL}${color_off}"
-	fi
 
 	if $color_is_on; then
 		# build git status for prompt
@@ -142,11 +131,10 @@ function prompt_command {
 		fi
 
 		# build python venv status for prompt
-		[[ ! -z $VIRTUAL_ENV ]] && PS1_VENV=" (venv: ${color_blue}${VIRTUAL_ENV#$WORKON_HOME}${color_off})"
 	fi
 
 	# set new color prompt
-	PS1="\n${color_user}${USER}${color_off} ${bg_black}[${fg_bold}${color_yellow}`pwd`${color_off}${bg_black}]${color_off}:${PS1_GIT}\n➜  "
+	PS1="\n${color_user}${fg_bold}${USER}${color_off} [${fg_bold}${color_yellow}`pwd`${color_off}]: ${PS1_GIT}\n-> "
 
 	# get cursor position and add new line if we're not in first column
 	# cool'n'dirty trick (http://stackoverflow.com/a/2575525/1164595)
@@ -157,7 +145,7 @@ function prompt_command {
 #	echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
 #	stty $OLDSTTY
 	echo -en "\033[6n" && read -sdR CURPOS
-	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}↵${color_error_off}"
+	[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}>${color_error_off}"
 
 }
 
